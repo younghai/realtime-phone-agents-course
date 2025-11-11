@@ -21,7 +21,7 @@
 - [License](#license)
 
 
-## 📘 Course Overview
+## Course Overview
 
 This isn't your typical plug-and-play tutorial where you spin up a demo in five minutes and call it a day. 
 
@@ -88,12 +88,12 @@ Excited? Let's get started!
 
 ---
 
-## 👩‍💻 Who is this course for?
+## Who is this course for?
 
 This course is for Software Engineers, ML Engineers, and AI Engineers who want to level up by building complex end-to-end apps. It's not just a basic "Hello World" tutorial—it's a deep dive into making **production-ready voice agents**.
 
 
-## 🗓️ Course Breakdown: Week by Week
+## Course Breakdown: Week by Week
 
 Each week, you'll unlock **a new chapter of the journey**. You'll get:
 
