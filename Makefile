@@ -23,6 +23,23 @@ format-check:
 lint-check:
 	uv run ruff check $(CHECK_DIRS)
 
+# --- Docker ---
+
+build-faster-whisper-image:
+	docker build -f Dockerfile.faster_whisper \
+		--build-arg FASTER_WHISPER_MODEL=$(FASTER_WHISPER__MODEL) \
+		-t theneuralmaze/faster-whisper-server:latest .
+
+push-faster-whisper-image:
+	docker push theneuralmaze/faster-whisper-server:latest
+
+build-orpheus-image:
+	docker build -f Dockerfile.orpheus \
+		-t theneuralmaze/orpheus-server:latest .
+
+push-orpheus-image:
+	docker push theneuralmaze/orpheus-server:latest
+
 # --- RunPod ---
 
 create-faster-whisper-pod:

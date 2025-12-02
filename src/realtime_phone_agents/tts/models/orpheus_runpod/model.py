@@ -21,24 +21,29 @@ import numpy as np
 from numpy.typing import NDArray
 
 from realtime_phone_agents.tts.models.base import TTSModel
-from realtime_phone_agents.tts.models.orpheus_runpod.options import OrpheusTTSOptions, CUSTOM_TOKEN_PREFIX
-from realtime_phone_agents.tts.models.orpheus_runpod.token_decoders import convert_to_audio
+from realtime_phone_agents.tts.models.orpheus_runpod.options import (
+    OrpheusTTSOptions,
+    CUSTOM_TOKEN_PREFIX,
+)
+from realtime_phone_agents.tts.models.orpheus_runpod.token_decoders import (
+    convert_to_audio,
+)
 
 
 class OrpheusTTSModel(TTSModel):
     def __init__(self, options: OrpheusTTSOptions | None = None):
         """
         Initialize the Orpheus TTS model.
-        
+
         Args:
             options: Configuration options for TTS generation. If None, uses defaults.
         """
         self.options = options or OrpheusTTSOptions()
 
-    def set_voice(self, voice: str):
+    def set_voice(self, voice: str) -> None:
         """
         Set the voice for the Orpheus TTS model.
-        
+
         Args:
             voice: Voice identifier.
         """
@@ -47,11 +52,11 @@ class OrpheusTTSModel(TTSModel):
     def _format_prompt(self, prompt: str, voice: str) -> str:
         """
         Format the input prompt with Orpheus-specific tokens.
-        
+
         Args:
             prompt: The text to synthesize.
             voice: Voice identifier.
-        
+
         Returns:
             Formatted prompt string with special tokens.
         """
@@ -64,11 +69,11 @@ class OrpheusTTSModel(TTSModel):
     ) -> Generator[str, None, None]:
         """
         Generate audio tokens synchronously via streaming API.
-        
+
         Args:
             text: Text to convert to speech.
             options: TTS configuration options.
-        
+
         Yields:
             Individual token strings as they arrive from the API.
         """
@@ -134,11 +139,11 @@ class OrpheusTTSModel(TTSModel):
     def _turn_token_into_id(self, token_string: str, index: int) -> Optional[int]:
         """
         Convert a token string to its numeric audio token ID.
-        
+
         Args:
             token_string: Token text containing custom token markers.
             index: Current token position (used for offset calculation).
-        
+
         Returns:
             Decoded token ID or None if invalid.
         """
@@ -152,7 +157,9 @@ class OrpheusTTSModel(TTSModel):
 
         if last_token.startswith(CUSTOM_TOKEN_PREFIX) and last_token.endswith(">"):
             try:
-                number_str = last_token[14:-1]  # Extract number from <custom_token_XXXXX>
+                number_str = last_token[
+                    14:-1
+                ]  # Extract number from <custom_token_XXXXX>
                 token_id = int(number_str) - 10 - ((index % 7) * 4096)
                 return token_id
             except ValueError:
@@ -167,11 +174,11 @@ class OrpheusTTSModel(TTSModel):
     ) -> NDArray[np.int16] | None:
         """
         Convert token IDs to PCM audio samples.
-        
+
         Args:
             multiframe: List of audio token IDs.
             count: Current token count (for logging).
-        
+
         Returns:
             Audio samples as int16 array or None if conversion fails.
         """
@@ -194,13 +201,13 @@ class OrpheusTTSModel(TTSModel):
     ) -> Generator[NDArray[np.int16], None, None]:
         """
         Decode streaming tokens into audio chunks.
-        
+
         Buffers tokens and yields audio at regular intervals using Orpheus's
         multi-frame encoding (28 tokens, output every 7 tokens).
-        
+
         Args:
             token_gen: Generator yielding token strings.
-        
+
         Yields:
             Audio chunks as numpy arrays of PCM samples.
         """
@@ -230,11 +237,11 @@ class OrpheusTTSModel(TTSModel):
     ) -> Generator[tuple[int, NDArray[np.int16]], None, None]:
         """
         Synchronous streaming TTS generation.
-        
+
         Args:
             text: Text to convert to speech.
             options: Optional TTS configuration.
-        
+
         Yields:
             Tuples of (sample_rate, audio_chunk).
         """
@@ -255,16 +262,16 @@ class OrpheusTTSModel(TTSModel):
     ) -> AsyncGenerator[tuple[int, NDArray[np.int16]], None]:
         """
         Asynchronous streaming TTS generation.
-        
+
         This method enables the async for pattern:
             async for sample_rate, chunk in model.stream_tts("Hello"):
                 # Process each chunk as it arrives
                 await process_audio(chunk, sample_rate)
-        
+
         Args:
             text: Text to convert to speech.
             options: Optional TTS configuration.
-        
+
         Yields:
             Tuples of (sample_rate, audio_chunk) as they become available.
         """
@@ -304,14 +311,14 @@ class OrpheusTTSModel(TTSModel):
     ) -> bytes:
         """
         Perform complete text-to-speech conversion (async).
-        
+
         This method waits for the full synthesis to complete and returns
         the complete audio as bytes.
-        
+
         Args:
             text: Text to convert to speech.
             options: Optional TTS configuration.
-        
+
         Returns:
             Complete audio as bytes (PCM int16 format).
         """
@@ -339,11 +346,11 @@ class OrpheusTTSModel(TTSModel):
     ) -> tuple[int, NDArray[np.int16]]:
         """
         Synchronous blocking TTS (for non-async contexts).
-        
+
         Args:
             text: Text to convert to speech.
             options: Optional TTS configuration.
-        
+
         Returns:
             Tuple of (sample_rate, audio_array).
         """
@@ -363,4 +370,3 @@ class OrpheusTTSModel(TTSModel):
             audio = np.zeros(0, dtype=np.int16)
 
         return opts.sample_rate, audio
-
