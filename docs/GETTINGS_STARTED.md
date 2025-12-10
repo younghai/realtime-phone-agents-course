@@ -107,6 +107,33 @@ These variables allow your local Gradio application and backend to communicate d
 
 All other `ORPHEUS__` and `FASTER_WHISPER__` variables can be left at their defaults unless you wish to customize behavior.
 
+### Qdrant Cloud
+
+To use Qdrant Cloud, you need to create an account and create a cluster.
+
+Simply add your Qdrant Cloud API Key, Cluster URL and Cluster Name to the `QDRANT__API_KEY`, `QDRANT__CLUSTER_URL` and `QDRANT__CLUSTER_NAME` vars in your `.env` file.
+
+```
+QDRANT__API_KEY=YOUR_QDRANT_CLOUD_API_KEY
+QDRANT__CLUSTER_URL=YOUR_QDRANT_CLOUD_CLUSTER_URL
+```
+
+### Opik
+
+To use Opik, you need to create an account and create a project.
+
+Simply add your Opik API Key and Project Name to the `OPIK__API_KEY`.
+
+### Twilio
+
+Simply add your Twilio Account SID and Auth Token to the `TWILIO__ACCOUNT_SID` and `TWILIO__AUTH_TOKEN` vars in your `.env` file.
+
+```
+TWILIO__ACCOUNT_SID=YOUR_TWILIO_ACCOUNT_SID
+TWILIO__AUTH_TOKEN=YOUR_TWILIO_AUTH_TOKEN
+```
+
+
 # 5. Twilio 
 
 You can hook up a Stream to a SIP provider like Twilio, which lets you give your app its own phone number.
@@ -114,6 +141,7 @@ You can hook up a Stream to a SIP provider like Twilio, which lets you give your
 [Sign up on Twilio](https://www.twilio.com/) and buy a phone number with voice support. If you’re on a trial account, you'll receive a free phone number (that's what we've done for our experiments).
 
 Don't worry about creating TwiML Apps, or enabling the connection between Twilio and our API, as we will cover that in detail as part of the course.
+
 
 # 6. Ngrok
 
